@@ -1,5 +1,6 @@
 import 'package:codigosqr/pages/home_page.dart';
 import 'package:codigosqr/pages/map_page.dart';
+import 'package:codigosqr/providers/scan_list_provider.dart';
 import 'package:codigosqr/providers/ui_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => new UiProvider()),
+        ChangeNotifierProvider(create: (_) => new ScanListProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         initialRoute: 'home',
         routes: {
           'home'  : (_) => HomePage(),
-          'mapa'  : (_) => MapPage()
+          'mapa'  : (_) => Mapa()
         },
 
         theme: ThemeData(

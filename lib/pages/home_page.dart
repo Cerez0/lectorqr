@@ -1,24 +1,38 @@
 import 'package:codigosqr/pages/direcciones_page.dart';
 import 'package:codigosqr/pages/mapas_page.dart';
+
 import 'package:codigosqr/providers/db_provider.dart';
+import 'package:codigosqr/providers/scan_list_provider.dart';
 import 'package:codigosqr/providers/ui_provider.dart';
+
 import 'package:codigosqr/widgets/custom_button_scan.dart';
 import 'package:codigosqr/widgets/custom_navigator_bar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
+        elevation: 0,
         title: Text('Historial'),
         actions: [
-          IconButton(icon: Icon(Icons.delete_forever), onPressed: () {})
+          IconButton(
+              icon: Icon( Icons.delete_forever ),
+              onPressed: (){
+
+                Provider.of<ScanListProvider>(context, listen: false)
+                    .borrarTodos();
+
+              }
+          )
         ],
       ),
       body: _HomePageBody(),
+
       bottomNavigationBar: CustomNavigatorBar(),
       floatingActionButton: CustomButtonScan(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -26,28 +40,35 @@ class HomePage extends StatelessWidget {
   }
 }
 
+
 class _HomePageBody extends StatelessWidget {
-  int num = 5;
 
   @override
   Widget build(BuildContext context) {
+
+    // Obtener el selected menu opt
     final uiProvider = Provider.of<UiProvider>(context);
+
+    // Cambiar para mostrar la pagina respectiva
     final currentIndex = uiProvider.selectedMenuOpt;
 
-    // TODO: Temporal leer la base de datos
-    final tempScan = new ScanModel(valor: 'http://www.google.com');
-    //DBProvider.db.nuevoScan(tempScan);
-    DBProvider.db.getScanById(2).then((scan) => print(scan.valor));
+    // Usar el ScanListProvider
+    final scanListProvider = Provider.of<ScanListProvider>(context, listen: false);
 
-    switch (currentIndex) {
+    switch( currentIndex ) {
+
       case 0:
+        scanListProvider.cargarScanPorTipo('geo');
         return MapasPage();
 
       case 1:
+        scanListProvider.cargarScanPorTipo('http');
         return DireccionesPage();
 
       default:
         return MapasPage();
     }
+
+
   }
 }
